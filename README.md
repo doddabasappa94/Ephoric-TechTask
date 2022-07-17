@@ -1,6 +1,6 @@
 # CICD Pipeline
 
-### Stages of CICD Pipeline 1
+### Stages of CICD Pipeline For Build and Deploy
 1. Clone: checks out the source code to jenkins workspace.
 2. Build & Test: Installs the dependencies and run the unit test.
 3. Build Docker image: Docker Container image is created.
@@ -12,16 +12,16 @@
 #### **Jenkins pipeline view**
 ![Jenkins pipeline view](images/CICDpipelinedeploytoK8scluster1.png "Title")
 
-### Stages of CICD Pipeline for Parallel build and deploy
+### Stages of CICD Pipeline for Parallel Build and Deploy
 1. Checkout: checks out the source code to jenkins workspace.
 2. Build & Test: Installs the dependencies and run the unit test.
 3. Build Docker image: Both Docker Container image is created.
 4. Push Image to Hub: Both Docker image is now pushed to Dockerhub.
 5. Deploy to K8s: Both Deployment.yaml file deploys image to the K8s Cluster.
 
-### High lights of my CICD pipeline
+### High lights of my CICD pipeline Parallel Build and Deploy
 
-#### **Jenkins pipeline view**
+#### **Jenkins pipeline view Parallel Build and Deploy**
 ![Jenkins pipeline view](images/Parallel-build-and-deploy.png "Title")
 #### **CICD Process**
 Developer pushes the source code to his git branch and immediately triggers the jenkins job. Jenkins builds, tests and containerizes the app and at last it will deploy it to K8s cluster. This is the path path, This is happens if all criterias are met .
