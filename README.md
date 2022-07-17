@@ -11,6 +11,10 @@
 
 #### **Jenkins pipeline view**
 ![Jenkins pipeline view](images/CICDpipelinedeploytoK8scluster1.png "Title")
+### References
+* **Sample App for** demo:  
+![Sample App for demo](images/service-exposed.png "Title")
+ * Pipeline Implimentation:https://github.com/doddabasappa94/devops-automation
 
 ### Stages of CICD Pipeline for Parallel Build and Deploy
 1. Checkout: checks out the source code to jenkins workspace.
