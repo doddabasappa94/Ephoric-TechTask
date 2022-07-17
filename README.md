@@ -175,8 +175,31 @@ data:
         channel: '#prometheusalert'
 
 ```
-#### Slack Prometheus Alert Manager Notifications
+#### Prometheus Alert Manager Notifications In Slack
 ![Slack Alerts](images/slackalert.png "Title") 
+
+# ELK Stack Log Monitoring(Elasticsearch Stack: Elasticsearch, Logstash, Kibana)
+* ELK stack is a combination of three open-source tools that form a log management platform that specializes in searching, analyzing, and visualizing logs generated from kubernets pods.
+* Prometheus is mainly we used for metrics while Elk Stack is mainly to aggregate logs from all your applications, analyze these logs, and create visualizations for application.
+* Elastic Search, Kibana, and Logstash make up the ELK stack. Log aggregation is the major goal of this. The development of micro-service architecture needs a better method for collecting and searching logs for debugging purposes. These logs can be gathered and explored using the ELK stack.
+
+## ELK Stack Components:
+* **Elastic Search:** This is the database which stores all the logs,he indexer and search engine used to store the data gathered by Beats and Logstash.
+* **Kibana:** an interface to Elasticsearch providing many types of visualization to help analyse and understand the data.
+* **Logstash:** collects and processes data in many formats, allowing parsing and enrichment.
+* **Filebeat:** Filebeat is very important component and works as the log exporter. It exports and forwards the log to Logstash.
+
+### ELK stack Architecture
+![Elk Architecture](images/ELK.png "Title") 
+
+### ELK stack Application K8s Pods
+
+![Elk Pods](images/elkstackpodssvc.png "Title") 
+
+### Application logs
+
+![ Application logs](images/elasticsearchK8slogs.png "Title") 
+
 
 # Shell Scripting
 ### Shellscript identify IP Regex and replace it with 127.0.0.1
