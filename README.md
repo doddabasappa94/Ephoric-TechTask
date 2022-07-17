@@ -2,14 +2,10 @@
 
 ### Stages of CICD Pipeline
 1. Clone: checks out the source code to jenkins workspace.
-2. Sonar Scanning: Sonar Qube scanning is performed against the source code.
-3. Quality Gate: Validateds the Quality of the source code, allows only if its passing. 
-4. Build & Test: Installs the dependencies and run the unit test.
-5. Dependency Vulnerability Check : snyk will perform the vulnerablity scanning on the dependencies.
-6. Build and Sign Docker image: Container image is created and Signed by the notary.
-7. Image Scanning: Build image is scanned by Snyk for any vulnerabilities.
-8. Push To Docker Repo: Docker image is now pushed to Dockerhub.
-7. Deploy: Helm Chart is deployed to dev namespace under Dev Cluster.
+2. Build & Test: Installs the dependencies and run the unit test.
+3. Build Docker image: Docker Container image is created.
+4. Push Image to Hub: Docker image is now pushed to Dockerhub.
+5. Deploy to K8s: Deployment.yaml file deploys image to the K8s using by validdating kubeconfig.
 
 ### High lights of my CICD pipeline
 
@@ -59,13 +55,9 @@ Developer pushes the code to his branch and triggers the jenkins job. Jenkins bu
 
 ## Terraform template strucure
 ```
-├── environment #----------------------> Templatize Cluster configuration
-│   ├── non-production.tfvars
-│   ├── observability.tfvars
-│   └── production.tfvars
 ├── module  #--------------------------> module definition
-│   ├── eks
-│   │   ├── eksCluster.tf
+│   ├── Ec2
+│   │   ├── .tf
 │   │   ├── iam.tf
 │   │   ├── locals.tf
 │   │   ├── securityGroup.tf
