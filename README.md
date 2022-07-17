@@ -1,6 +1,6 @@
 # CICD Pipeline
 
-### Stages of CICD Pipeline
+### Stages of CICD Pipeline 1
 1. Clone: checks out the source code to jenkins workspace.
 2. Build & Test: Installs the dependencies and run the unit test.
 3. Build Docker image: Docker Container image is created.
@@ -10,37 +10,26 @@
 ### High lights of my CICD pipeline
 
 #### **Jenkins pipeline view**
-![Jenkins pipeline view](img/JenkinsPipeline.png "Title")
+![Jenkins pipeline view](images/CICDpipelinedeploytoK8scluster1.png "Title")
 
-#### **Sonar Scanner Result**
-![Sonar Scanner Result](img/QualityGate.png "Title")
+### Stages of CICD Pipeline for Parallel build and deploy
+1. Checkout: checks out the source code to jenkins workspace.
+2. Build & Test: Installs the dependencies and run the unit test.
+3. Build Docker image: Both Docker Container image is created.
+4. Push Image to Hub: Both Docker image is now pushed to Dockerhub.
+5. Deploy to K8s: Both Deployment.yaml file deploys image to the K8s Cluster.
 
-#### **Dependency Vulnerablity scan Report** 
-![Dependency Vulnerablity scan Report](img/Dependency_Vulnerablity_Report.png "Title")
+### High lights of my CICD pipeline
 
-#### **Container  Vulnerablity scan Report**
-![Container  Vulnerablity scan Report ](img/VulnerablityReportContainer.png "Title")
-
-
-## CICD Process 
-#### **Process Overview**
-![Process Overview](img/CICD_Process.png "Title")
-
+#### **Jenkins pipeline view**
+![Jenkins pipeline view](images/Parallel-build-and-deploy.png "Title")
 #### **CICD Process**
-Developer pushes the code to his branch and triggers the jenkins job. Jenkins builds, tests and containerizes the app and at last it will deploy it to dev namespace under the dev cluster. This is more of a happy path, which happens if all criterias are met.
-
-**Note:** 
-* The job can be tuned to fail the CICD process if the app dosent meets the required criteria
-    - if code quality is not good.
-    - if package used has critical vulnerabilities.
-    - if unit test fails. 
-    - if container has critical vulnerabilities.
-* This pipeline is implementaion of DevSecOps, "shift left" approach. 
-* The process will restrict the development team to follow pre defined standards, hence it makes sure that the application deployed is working, vulnerability free and has high code quality standards.
+Developer pushes the source code to his git branch and immediately triggers the jenkins job. Jenkins builds, tests and containerizes the app and at last it will deploy it to K8s cluster. This is the path path, This is happens if all criterias are met .
 
 ### Refernces
-* Sample App for demo: https://github.com/navaganeshr/nodejs-hello-world
-* pipeline implementation: https://github.com/navaganeshr/app-pipelines
+* **Sample App for** demo:  
+![Sample App for demo](images/service-exposed.png "Title")
+* pipeline implementation: https://github.com/doddabasappa94/parallel-devops
 
 
 # Infrastructure as code 
