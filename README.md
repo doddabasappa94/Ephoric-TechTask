@@ -178,6 +178,8 @@ data:
 #### Prometheus Alert Manager Notifications In Slack
 ![Slack Alerts](images/slackalert.png "Title") 
 
+
+
 # ELK Stack Log Monitoring(Elasticsearch Stack: Elasticsearch, Logstash, Kibana)
 * ELK stack is a combination of three open-source tools that form a log management platform that specializes in searching, analyzing, and visualizing logs generated from kubernets pods.
 * Prometheus is mainly we used for metrics while Elk Stack is mainly to aggregate logs from all your applications, analyze these logs, and create visualizations for application.
