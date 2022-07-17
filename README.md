@@ -194,3 +194,30 @@ data:
 #replace all ip with 127.0.0.1
 sed -r 's/[0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}/127.0.0.1/g' $1
 ```
+### For the Below CSV write a Shellscript to update 'C' Salary to 3000
+###### csv file abc.csv
+```
+Name,Age,Gender,Salary
+A,12,M,3000
+B,12,M,2000
+C,12,M,1000
+```
+csalary.sh
+```
+#! /bin/bash
+while IFS="," read -r rec_column1 rec_column2 rec_column3 rec_column4
+do
+	if [ $rec_column1 == "C" ];then
+          sed -i -r "s/${rec_column4}/3000/g" abc.csv
+          echo "Displaying Record-$rec_column1"
+          echo "Age: $rec_column2"
+          echo "Gender: $rec_column3"
+          echo "Salary: $rec_column4"
+	fi
+done < <(tail -n +2 abc.csv)
+```
+### Delete Crashlooping Pods in Kubernetes Cluster
+```
+#!/bin/bash
+kubectl get pods --all-namespaces | grep 'CrashLoopBackOff' | awk '{print $2 " --namespace=" $1}' | xargs kubectl delete pod echo "$2 is deleted"
+```
