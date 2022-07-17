@@ -56,6 +56,7 @@ Developer pushes the source code to his git branch and immediately triggers the 
 │   │   └── variable.tf
 │   ├── Rds
 │   │   ├── mysql.tf
+│   │   ├── securityGroup.tf
 │   │   └── variable.tf
 │   └── vpc
 │       └── vpc.tf
@@ -175,3 +176,21 @@ data:
 
 ```
 ![Slack Alerts](images/slackalert.png "Title") 
+
+# Shell Scripting
+### Shellscript identify IP Regex and replace it with 127.0.0.1
+###### Example file ipfile.txt
+```
+192.53.65.32 12.3.33.98.56
+198.26.36.26 13.2332.6565.56
+192.22.23.63 25.36.12.3
+10.26.16.12 8.8.8.8
+0.0.0.0 1.1.1.1
+```
+#### Ipregex.sh
+```
+#!/bin/bash
+
+#replace all ip with 127.0.0.1
+sed -r 's/[0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}/127.0.0.1/g' $1
+```
