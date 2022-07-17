@@ -1,2 +1,2 @@
-# Ephoric-TechTask
+# CICD Pipeline
 Tasks
