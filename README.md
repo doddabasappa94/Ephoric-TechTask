@@ -217,6 +217,10 @@ do
 	fi
 done < <(tail -n +2 abc.csv)
 ```
+ ##### or
+ ```
+ awk 'BEGIN{FS=OFS=","} $1=="C"{$4="3000"} 1' abc.csv
+ ```
 ### Delete Crashlooping Pods in Kubernetes Cluster
 #### Crashloop.sh
 ```
