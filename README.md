@@ -175,6 +175,7 @@ data:
         channel: '#prometheusalert'
 
 ```
+#### Slack Prometheus Alert Manager Notifications
 ![Slack Alerts](images/slackalert.png "Title") 
 
 # Shell Scripting
@@ -202,7 +203,7 @@ A,12,M,3000
 B,12,M,2000
 C,12,M,1000
 ```
-csalary.sh
+#### csalary.sh
 ```
 #! /bin/bash
 while IFS="," read -r rec_column1 rec_column2 rec_column3 rec_column4
@@ -217,6 +218,7 @@ do
 done < <(tail -n +2 abc.csv)
 ```
 ### Delete Crashlooping Pods in Kubernetes Cluster
+#### Crashloop.sh
 ```
 #!/bin/bash
 kubectl get pods --all-namespaces | grep 'CrashLoopBackOff' | awk '{print $2 " --namespace=" $1}' | xargs kubectl delete pod echo "$2 is deleted"
