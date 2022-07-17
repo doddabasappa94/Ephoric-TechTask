@@ -105,11 +105,11 @@ Developer pushes the source code to his git branch and immediately triggers the 
     * Grafana
 
 #### **Prometheus Architecture**
-![Prometheus Components](imges/prom-arch.jpg "Title")
+![Prometheus Components](images/prom-arch.jpg "Title")
 #### **Prometheus Components**
 ![Prometheus Components](img/prometheus_components.png "Title")
 #### **Prometheus Operator Workflow**
-![Prometheus Operator Architecture](imges/prometheus-op-architecture.png "Title")
+![Prometheus Operator Architecture](images/prometheus-op-architecture.png "Title")
 
 
 #### **Features**
