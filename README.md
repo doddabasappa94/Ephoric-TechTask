@@ -1,2 +1,2 @@
 # CICD Pipeline
-Tasks
+ #Stages of pipeline 
