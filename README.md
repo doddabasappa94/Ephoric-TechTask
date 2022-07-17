@@ -34,10 +34,10 @@ Developer pushes the source code to his git branch and immediately triggers the 
 
 # Infrastructure as code 
 
-**Following Modules are used to create eks Cluster**
+**Following Modules are used to create Infrastructure**
 * vpc 
-* eks cluster
-* managed_node_group  
+* Ec2  
+* Rds
 
 **Note**
 * These modules are tailored to suite my requirement
@@ -46,25 +46,22 @@ Developer pushes the source code to his git branch and immediately triggers the 
 ```
 ├── module  #--------------------------> module definition
 │   ├── Ec2
-│   │   ├── .tf
-│   │   ├── iam.tf
-│   │   ├── locals.tf
+│   │   ├── instance.tf
+│   │   ├── variable.tf
 │   │   ├── securityGroup.tf
 │   │   └── variable.tf
-│   ├── node_group
-│   │   ├── iam.tf
-│   │   ├── locals.tf
-│   │   ├── nodeGroup.tf
-│   │   ├── output.tf
+│   ├── Rds
+│   │   ├── mysql.tf
 │   │   └── variable.tf
 │   └── vpc
-│       ├── gateways.tf
-│       ├── locals.tf
-│       ├── output.tf
-│       ├── route_table.tf
-│       ├── subnets.tf
-│       ├── variable.tf
 │       └── vpc.tf
+│       ├── public_subnet.tf
+│       ├── private_subnet.tf 
+|       ├── route_table.tf
+│       ├── internet_gateway.tf
+│       ├── nat.tf 
+│       ├── variable.tf
+
 ├── main.tf      #------------------------> module declaration
 ├── provider.tf  #------------------------> Provider definition
 ├── backend.tf   #------------------------> Backend configuration
@@ -75,33 +72,19 @@ Developer pushes the source code to his git branch and immediately triggers the 
 ### Salient features of the terraform template
 1. Template Creates following things using vpc module.
     - vpc
-    - subnet
+    - 3 Public subnets and 3 Private subnets
     - Route table & Route association
     - internet and Nat Gateways
-2. Template Creates following things using eks module.
-    - iam role required by eks
-    - security group for eks
-    - eks cluster 
-3. Template Creates following things using node_group module.
-    - iam role used by eks worker node group
-    - security group used by eks worker node group
-    - private managed node group     
-    - public managed node group    
-4. Terraform saves the state in s3 bucket. Terraform template is executed from the jenkins job. Concurrent builds are disabled, so state file locking is not needed. 
-
-5. Template is workspaced, same template can be used to bootstrap multiple cluster using multiple workspaces.
-
-6. Provisioning is done using jenkins pipeline.
-
-#### **Infra Pipeline Stages**
-![Infra Pipeline Stages](img/Infra_pipeline.png "Title")
-### Refernces
-* Terraform template: https://github.com/navaganeshr/eks_cluster
-* pipeline implementation: https://github.com/navaganeshr/infra-pipelines
+2. Template Creates following things using Ec2 module.
+    - 3 EC2 instances created
+    - security group created
+3. Template Creates following things using Rds module.
+    - Rds instance created  
+4. Template is workspaced, same template can be used to bootstrap multiple cluster using multiple workspaces.
 
 # Application Monitoring 
 * Cluster and application monitoring is crucial for any organization whose applications run on clusters. Any problem with the cluster can lead to a huge loss to the organization. 
-* For current implementation, Prometheus Opertor and associated tools like kube-state metrics, nodeexporter , blackbox exporter are used to monitor the eks cluster components.
+* For current implementation, Prometheus Opertor and associated tools like kube-state metrics, nodeexporter , alert manager are used to monitor the cluster components.
 * Applcations related metrics can also be monitored through prometheus if the instrumentation is implemented at the microservice level.
 
 ### About Prometheus Operator
@@ -111,7 +94,7 @@ Developer pushes the source code to his git branch and immediately triggers the 
     * prometheuses – defines installation for Prometheus
     * prometheusrules – defines rules for alertmanager
     * servicemonitors – determines which services should be monitored
-* The operator monitors Prometheus resources and generates StatefullSet (Prometheus and Alertmanager) and configuration files (prometheus.yaml, alertmanager.yaml).
+* The operator monitors Prometheus resources and generates Deployments (Prometheus and Alertmanager) and configuration files (prometheus.yaml, alertmanager.yaml).
 
 * Current operator chart deploys following components 
     * Prometheus Operator
@@ -122,11 +105,11 @@ Developer pushes the source code to his git branch and immediately triggers the 
     * Grafana
 
 #### **Prometheus Architecture**
-![Prometheus Components](img/prom-arch.jpg "Title")
+![Prometheus Components](imges/prom-arch.jpg "Title")
 #### **Prometheus Components**
 ![Prometheus Components](img/prometheus_components.png "Title")
 #### **Prometheus Operator Workflow**
-![Prometheus Operator Architecture](img/prometheus-op-architecture.png "Title")
+![Prometheus Operator Architecture](imges/prometheus-op-architecture.png "Title")
 
 
 #### **Features**
@@ -136,33 +119,59 @@ Cluster is monitored using the Prometheus stack. Deployment is done through helm
 
 
 #### **Cluster Metrics**
-![Cluster Metrics](img/ClusterMetrics.png "Title")
+![Cluster Metrics](images/Clustermetrics.png "Title")
 ### Application Monitoring 
-#### **Application Metrics**
+#### ** Pod Application Metrics**
 
-![Cluster Metrics](img/app-metrics.png "Title")
-## **service monitors**: 
-* Service monitors that describe and manage monitoring targets to be scraped by Prometheus. The Prometheus resource connects to ServiceMonitors using a **serviceMonitorSelector** field. This way Prometheus sees what targets (apps) have to be scraped.
+![Cluster Metrics](images/podmetrics.png "Title")
+## **Prometheus Alert manager**: 
+* Service monitors that describe and manage alerts to the targets like email and slack to be scraped by Prometheus. The Prometheues describe Rules to trigger a alert based Conditions..
 
 ### Exmaple implementation of service monitor for application
 
-* **Service Monitor Definition for app**
+* **Alert Manager ConfigMap for app**
 ```
-apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
+kind: ConfigMap
+apiVersion: v1
 metadata:
-  name: nodejs-hello-world
-  labels:
-    env: dev
-    release: monitoring-stack
-spec:
-  selector:
-    matchLabels:
-      app: rpc-app
-  endpoints:
-  - port: web
-```
+  name: alertmanager-config
+  namespace: monitoring
+data:
+  config.yml: |-
+    global:
+    templates:
+    - '/etc/alertmanager/*.tmpl'
+    route:
+      receiver: alert-emailer
+      group_by: ['alertname', 'priority']
+      group_wait: 10s
+      repeat_interval: 30m
+      routes:
+        - receiver: prometheusalert
+        # Send severity=slack alerts to slack.
+          match:
+            severity: slack
+          group_wait: 10s
+          repeat_interval: 1m
+ 
+    receivers:
+    - name: alert-emailer
+      email_configs:
+      - to: abc1234@gmail.com
+        send_resolved: false
+        from: slackalerts24@gmail.com
+        smarthost: smtp.gmail.com:587
+        auth_username: "slackalerts24@gmail.com"
+        auth_identity: "slackalerts24@gmail.com"
+        auth_password: "Alerts@123"
+        require_tls: false
+    - name: prometheusalert
+      slack_configs:
+      - api_url: https://hooks.slack.com/services/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
+        channel: '#prometheusalert'
 
+```
+![Cluster Metrics](images/slackalert.png "Title")
 * **Prometheus config for selecting targets**
 
 ```
