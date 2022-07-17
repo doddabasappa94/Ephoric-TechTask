@@ -123,7 +123,7 @@ Cluster is monitored using the Prometheus stack. Deployment is done through helm
 ### Application Monitoring 
 #### ** Pod Application Metrics**
 
-![Cluster Metrics](images/podmetrics.png "Title")
+![Pod Metrics](images/Podmetrics.png "Title")
 ## **Prometheus Alert manager**: 
 * Service monitors that describe and manage alerts to the targets like email and slack to be scraped by Prometheus. The Prometheues describe Rules to trigger a alert based Conditions..
 
