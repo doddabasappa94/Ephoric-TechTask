@@ -84,7 +84,7 @@ Developer pushes the source code to his git branch and immediately triggers the 
 
 # Application Monitoring 
 * Cluster and application monitoring is crucial for any organization whose applications run on clusters. Any problem with the cluster can lead to a huge loss to the organization. 
-* For current implementation, Prometheus Opertor and associated tools like kube-state metrics, nodeexporter , alert manager are used to monitor the cluster components.
+* For current implementation, Prometheus Opertor and associated tools like kube-state metrics, node-exporter , alert manager are used to monitor the cluster components.
 * Applcations related metrics can also be monitored through prometheus if the instrumentation is implemented at the microservice level.
 
 ### About Prometheus Operator
@@ -107,7 +107,7 @@ Developer pushes the source code to his git branch and immediately triggers the 
 #### **Prometheus Architecture**
 ![Prometheus Components](images/prom-arch.jpg "Title")
 #### **Prometheus Components**
-![Prometheus Components](img/prometheus_components.png "Title")
+![Prometheus Components](images/Promethues-grafana-pods.png "Title")
 #### **Prometheus Operator Workflow**
 ![Prometheus Operator Architecture](images/prometheus-op-architecture.png "Title")
 
@@ -117,10 +117,9 @@ Developer pushes the source code to his git branch and immediately triggers the 
 ### Cluster Monitoring 
 Cluster is monitored using the Prometheus stack. Deployment is done through helm chart 
 
-
 #### **Cluster Metrics**
 ![Cluster Metrics](images/Clustermetrics.png "Title")
-### Application Monitoring 
+### Pod Application Monitoring 
 #### ** Pod Application Metrics**
 
 ![Pod Metrics](images/Podmetrics.png "Title")
@@ -163,7 +162,7 @@ data:
         smarthost: smtp.gmail.com:587
         auth_username: "slackalerts24@gmail.com"
         auth_identity: "slackalerts24@gmail.com"
-        auth_password: "Alerts@123"
+        auth_password: "abc@123"
         require_tls: false
     - name: prometheusalert
       slack_configs:
@@ -171,25 +170,4 @@ data:
         channel: '#prometheusalert'
 
 ```
-![Cluster Metrics](images/slackalert.png "Title")
-* **Prometheus config for selecting targets**
-
-```
-apiVersion: monitoring.coreos.com/v1
-kind: Prometheus
-  metadata:
-    name: prometheus
-spec:
-  serviceAccountName: prometheus
-  serviceMonitorSelector:
-    matchLabels:
-      release: monitoring-stack
-  resources:
-    requests:
-      memory: 400Mi
-```
-## How is Prometheus opertor is Deployed ?
-- Prom Opertor helm chart is deployed though jenkins. 
-references: 
-  - Jenkins pipeline: https://github.com/navaganeshr/platform-pipelines
-  - helm chart : https://github.com/navaganeshr/platform-tools
+![Slack Alerts](images/slackalert.png "Title") 
