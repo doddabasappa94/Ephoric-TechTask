@@ -125,7 +125,7 @@ Cluster is monitored using the Prometheus stack. Deployment is done through helm
 #### **Cluster Metrics**
 ![Cluster Metrics](images/Clustermetrics.png "Title")
 ### Pod Application Monitoring 
-#### ** Pod Application Metrics**
+#### **Pod Application Metrics**
 
 ![Pod Metrics](images/Podmetrics.png "Title")
 ## **Prometheus Alert manager**: 
